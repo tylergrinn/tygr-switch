@@ -3,31 +3,27 @@ dist: xenial
 language: node_js
 node_js: lts/*
 
-env:
-  global:
-    - NODE_ENV=production
-
 addons:
   ssh_known_hosts: tygr.info
 
 # SSH Setup
-# before_script:
-#   - openssl aes-256-cbc
-#     -K $encrypted_db2095f63ba3_key
-#     -iv $encrypted_db2095f63ba3_iv
-#     -in deploy_rsa.enc
-#     -out /tmp/deploy_rsa
-#     -d
-#   - eval "$(ssh-agent -s)"
-#   - chmod 600 /tmp/deploy_rsa
-#   - ssh-add /tmp/deploy_rsa
+before_script:
+  - openssl aes-256-cbc
+    -K $encrypted_db2095f63ba3_key
+    -iv $encrypted_db2095f63ba3_iv
+    -in deploy_rsa.enc
+    -out /tmp/deploy_rsa
+    -d
+  - eval "$(ssh-agent -s)"
+  - chmod 600 /tmp/deploy_rsa
+  - ssh-add /tmp/deploy_rsa
 
 jobs:
   include:
     - stage: quality
       script: npm run quality:check
     - stage: build
-      script: npm run build
+      script: NODE_ENV=production npm run build
       deploy:
         - edge: true
           provider: npm
@@ -37,9 +33,9 @@ jobs:
           email: tylergrinn@gmail.com
           api_token:
             secure: z+7dzS7J8IWByzG/j7HQDXtGU8HONRQ9/uAN8r43/e8PxoGAwJd3IxyKefUUaPtA3wcHHhYu0fahdM8gl0QVWaVge2LNun1BZtLL8vAIieH2ySLbGZsqsxeIv9WAJId0WPuFcUd5wyoR6HqvDN2VSlKpPtE4RFOWv9OaZBsWERuIjg55ItWbHFUSbghKlZkyA9oeu2mBLZ5v4vJrdqoXpV1L54WRhSOEgfcWSi3sYmX45As39xF8s3yxXRf5vF2XcLi1/Svc1Q0lFVQWNntVWqP3caCqcQtKnLfSes+mSWN7lFxytrHYsR/fT3ZHefxB3JhAjTzsTpHRNd2hNugRKD4jg+uaK5OB7YhV2RmEeg+kA+HNDwsxrb85Q54CMw+b3QwdhvcKlsozJPhcqpLuMbem9bLVVcVvj1lQ+Qe4uhN3WQXfjq+TDrQYlkwn3/GGgztpRoC48u6pCrW1ZqD2OYF/ZNNCHdpKKJJ26jsaJEpM/0Gou8s3mWEb2TbNlL5qGST74HLDDGl3TCInffQBHpN/J0t+uHD3qhmnyi+Kl8eYBH6DwIxLiWPY/hl/N9QqrpmNI6LNxjeZtsEORzvvncT/W9aDARsxHttDrqGhd+n28o8CplFBa4bfOX5m1k1d0P+XdN/ZK1NPKQigEwNMSUPthhvj+e5X/YivUUwfVPc=
-        # - edge: true
-        #   on:
-        #     branch: main
-        #     tags: true
-        #   provider: script
-        #   script: bash deploy.sh
+        - edge: true
+          on:
+            branch: main
+            tags: true
+          provider: script
+          script: bash deploy.sh
