@@ -32,10 +32,10 @@ jobs:
             tags: true
           email: tylergrinn@gmail.com
           api_token:
-            secure: z+7dzS7J8IWByzG/j7HQDXtGU8HONRQ9/uAN8r43/e8PxoGAwJd3IxyKefUUaPtA3wcHHhYu0fahdM8gl0QVWaVge2LNun1BZtLL8vAIieH2ySLbGZsqsxeIv9WAJId0WPuFcUd5wyoR6HqvDN2VSlKpPtE4RFOWv9OaZBsWERuIjg55ItWbHFUSbghKlZkyA9oeu2mBLZ5v4vJrdqoXpV1L54WRhSOEgfcWSi3sYmX45As39xF8s3yxXRf5vF2XcLi1/Svc1Q0lFVQWNntVWqP3caCqcQtKnLfSes+mSWN7lFxytrHYsR/fT3ZHefxB3JhAjTzsTpHRNd2hNugRKD4jg+uaK5OB7YhV2RmEeg+kA+HNDwsxrb85Q54CMw+b3QwdhvcKlsozJPhcqpLuMbem9bLVVcVvj1lQ+Qe4uhN3WQXfjq+TDrQYlkwn3/GGgztpRoC48u6pCrW1ZqD2OYF/ZNNCHdpKKJJ26jsaJEpM/0Gou8s3mWEb2TbNlL5qGST74HLDDGl3TCInffQBHpN/J0t+uHD3qhmnyi+Kl8eYBH6DwIxLiWPY/hl/N9QqrpmNI6LNxjeZtsEORzvvncT/W9aDARsxHttDrqGhd+n28o8CplFBa4bfOX5m1k1d0P+XdN/ZK1NPKQigEwNMSUPthhvj+e5X/YivUUwfVPc=
+            secure: fmQOvlqbogMaSvfgEUUWMw1AwzVN4fUHwNbU7qYf0LYiUsBMabSInyOJCIS3oQQTMQzdjEW6K/CYe0QOj187aBnnZc2eUOnd07LPMaCwlb2wRX0Us3cxLqSzBnhM2C0Pzcp1LKL7x8gyf+a83WkWRC9vfkZZ61YCDSmpQvu1GHeFdoY1qWs16yzVLnCZ1KLY5Fj6AAvTe2U+oKne8NDjdWRpJSIwr2nxLNBhU76ytehtGg3Z3k4QV9OjBqkWSIIan6Ps0A9GtbgEQeUoBJq1JQhuUdJXBBtySvMz88dGgk7l/fNOKrG1XTsIo+d0YDdTDbdNPslWL6KfGYDHM+b308J6fIU/FhExcw11UxBtzEv4Mrr05vmJxnmXHXY471+64p6DcR/U7YutsIIctDmgJ3oUhVmMITMNQ5KJg7QYdLyWlmur5lfN+smd4cbJmwAWP7Bdd9RL2emV1eimA4qUfTQe71wHVsuQzeFBSEfOeMejHXp5C2SUlXiHN3zM29546Iq7BWMxvO/dzqMRdakUjoWEFCalZs2tyZyFxdPkDNT9i9+4MjPme1lABv2zVKpJ71dcqu2qVoxpIWLVpDF25ntZSvxHcPDdXUgzB0g2lH5fW9/Jvdn2q//TX+Dafnop8Z7//Pi6L/5Z9wFxPcSvLwHNEu86NGTCqeJYDErISgA=
         - edge: true
           on:
             branch: main
             tags: true
           provider: script
-          script: bash deploy.sh
+          script: rsync --recursive --delete lib node@tygr.info:@tygr/logo
