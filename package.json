@@ -1,6 +1,6 @@
 {
   "name": "@tygr/logo",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Logo for tygr",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -15,7 +15,7 @@
     "build": "run-s clean build:all",
     "serve": "http-server lib",
     "start:plugin": "webpack --watch",
-    "start:demo": "npm start --prefix demo",
+    "start:demo": "webpack-dev-server --config webpack.config.demo",
     "start": "npm-run-all --silent build:plugin --parallel start:demo start:plugin",
     "lint:check": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",

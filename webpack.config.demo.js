@@ -7,7 +7,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const common = {
   output: {
-    path: path.join(__dirname, '..', 'lib', 'demo'),
+    path: path.join(__dirname, 'lib', 'demo'),
     filename: '[name].js',
   },
   mode: 'development',
@@ -33,6 +33,7 @@ const common = {
     clientLogLevel: 'silent',
     writeToDisk: true,
     host: '0.0.0.0',
+    contentBase: path.resolve(__dirname, 'lib'),
   },
   plugins: [new MiniCssExtractPlugin()],
 };
