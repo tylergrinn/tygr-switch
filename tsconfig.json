@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "strict": true,
+    "module": "commonjs",
+    "target": "esnext",
+    "experimentalDecorators": true,
+    "declaration": true,
+    "outDir": "./lib",
+    "jsx": "react",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "allowJs": true
+  },
+  "include": ["src/**/*.ts"]
+}

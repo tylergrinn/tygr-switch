@@ -1,0 +1,80 @@
+{
+  "name": "@tygr/logo",
+  "version": "1.0.0",
+  "description": "Logo for tygr",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "clean": "rimraf lib",
+    "build:plugin": "webpack",
+    "build:demo": "webpack --config webpack.config.demo",
+    "build:all": "run-s build:plugin build:demo",
+    "build": "run-s clean build:all",
+    "serve": "http-server lib",
+    "start:plugin": "webpack --watch",
+    "start:demo": "npm start --prefix demo",
+    "start": "npm-run-all --silent build:plugin --parallel start:demo start:plugin",
+    "lint:check": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "lint": "npm run lint:fix",
+    "prettier:check": "prettier -c .",
+    "prettier:fix": "prettier --write .",
+    "prettier": "npm run prettier:fix",
+    "quality:check": "run-s --print-label --silent lint:check prettier:check",
+    "quality:fix": "run-p --print-label --silent lint:fix prettier:fix",
+    "quality": "npm run quality:fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com/tylergrinn/tygr-logo.git"
+  },
+  "keywords": [
+    "react",
+    "login",
+    "webpack"
+  ],
+  "author": "Tyler Grinn",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/preset-react": "^7.10.4",
+    "@babel/preset-typescript": "^7.10.4",
+    "@types/react": "^16.9.49",
+    "@types/react-dom": "^16.9.9",
+    "@typescript-eslint/eslint-plugin": "^4.2.0",
+    "@typescript-eslint/parser": "^4.2.0",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.1.0",
+    "copy-webpack-plugin": "^6.2.1",
+    "css-loader": "^4.3.0",
+    "eslint": "^7.9.0",
+    "eslint-config-alloy": "^3.8.0",
+    "eslint-plugin-react": "^7.21.2",
+    "html-webpack-plugin": "^4.5.0",
+    "mini-css-extract-plugin": "^0.11.2",
+    "nodemon": "^2.0.4",
+    "npm-run-all": "^4.1.5",
+    "optimize-css-assets-webpack-plugin": "^5.0.4",
+    "prettier": "^2.1.2",
+    "prettier-plugin-organize-imports": "^1.1.1",
+    "react-dom": "^17.0.1",
+    "rimraf": "^3.0.2",
+    "sass": "^1.26.11",
+    "sass-loader": "^10.0.2",
+    "style-loader": "^1.2.1",
+    "ts-loader": "^8.0.4",
+    "typescript": "^4.0.3",
+    "webpack": "^5.4.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0",
+    "webpack-merge": "^5.1.4",
+    "webpack-node-externals": "^2.5.2"
+  },
+  "optionalDependencies": {
+    "react": "16"
+  }
+}
