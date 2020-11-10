@@ -2,40 +2,35 @@ os: linux
 dist: xenial
 language: node_js
 node_js: lts/*
-
 addons:
   ssh_known_hosts: tygr.info
 
 # SSH Setup
-before_script:
-  - openssl aes-256-cbc
-    -K $encrypted_db2095f63ba3_key
-    -iv $encrypted_db2095f63ba3_iv
-    -in deploy_rsa.enc
-    -out /tmp/deploy_rsa
-    -d
+before_deploy:
+  - openssl aes-256-cbc -K $encrypted_db2095f63ba3_key -iv $encrypted_db2095f63ba3_iv
+    -in deploy_rsa.enc -out /tmp/deploy_rsa -d
   - eval "$(ssh-agent -s)"
   - chmod 600 /tmp/deploy_rsa
   - ssh-add /tmp/deploy_rsa
 
-jobs:
-  include:
-    - stage: quality
-      script: npm run quality:check
-    - stage: build
-      script: NODE_ENV=production npm run build
-      deploy:
-        - edge: true
-          provider: npm
-          on:
-            branch: main
-            tags: true
-          email: tylergrinn@gmail.com
-          api_token:
-            secure: fmQOvlqbogMaSvfgEUUWMw1AwzVN4fUHwNbU7qYf0LYiUsBMabSInyOJCIS3oQQTMQzdjEW6K/CYe0QOj187aBnnZc2eUOnd07LPMaCwlb2wRX0Us3cxLqSzBnhM2C0Pzcp1LKL7x8gyf+a83WkWRC9vfkZZ61YCDSmpQvu1GHeFdoY1qWs16yzVLnCZ1KLY5Fj6AAvTe2U+oKne8NDjdWRpJSIwr2nxLNBhU76ytehtGg3Z3k4QV9OjBqkWSIIan6Ps0A9GtbgEQeUoBJq1JQhuUdJXBBtySvMz88dGgk7l/fNOKrG1XTsIo+d0YDdTDbdNPslWL6KfGYDHM+b308J6fIU/FhExcw11UxBtzEv4Mrr05vmJxnmXHXY471+64p6DcR/U7YutsIIctDmgJ3oUhVmMITMNQ5KJg7QYdLyWlmur5lfN+smd4cbJmwAWP7Bdd9RL2emV1eimA4qUfTQe71wHVsuQzeFBSEfOeMejHXp5C2SUlXiHN3zM29546Iq7BWMxvO/dzqMRdakUjoWEFCalZs2tyZyFxdPkDNT9i9+4MjPme1lABv2zVKpJ71dcqu2qVoxpIWLVpDF25ntZSvxHcPDdXUgzB0g2lH5fW9/Jvdn2q//TX+Dafnop8Z7//Pi6L/5Z9wFxPcSvLwHNEu86NGTCqeJYDErISgA=
-        - edge: true
-          on:
-            branch: main
-            tags: true
-          provider: script
-          script: rsync --recursive --delete lib node@tygr.info:@tygr/logo
+script:
+  - npm run quality:check
+  - npm run build
+
+deploy:
+  - on:
+      branch: main
+      tags: true
+      repo: tylergrinn/tygr-logo
+    provider: npm
+    email: tylergrinn@gmail.com
+    skip_cleanup: true
+    api_token:
+      secure: f6DTO2ata9F3vEl3pgL0duLtlPwHVwviVzvDgoAkQJxIIxYms4DcJIab9aCkldJxuFHcg4t9FO82nxZdlDX+Mo0qTwzEXFgoZMSxPoIxEnfPRpTOWFC3IanUUOkEXFcctyAq0cWG3YGSe8aQPfTcRhMA7bspC7L+ac76/Tv2HNkd39S96f7/JIq54vu6SHXUUzntzGxG9xNGg8BsF/gcpRC119UNaSadM9hQFPAh+vg+kU36dPnrWuynOPfAn0z5Exx72Aut9g7urAJuzTkY/USVs8v46bTRZjulr1QjrrkvEpTBllysV6H8pAHQVkl2qnbJW5UqTtzOH2tYgZx1KvX+F7WqQ+VJKpaKxjfVRLNCJ5KEuRbzK2ZvIb480ugXhlHfHoyLMWwGFRPx9niZqNDmp8aTVgtiV3uIItqH5Mj1pxh8s/GbdQe7BiduCQIw34HJiVtqtAQ0DbFQoblRKqMhozzo6e1+YYrEkC8xwInkj46rU94YMSYN8v80nn4D84WfY5eYHf7UekcJptN9xV/Aqrr3Yuru/cbwvr/bKir4+5NWC7agaAy9To1Op6at+N4J/Z1OxjcrtMhju36XgylKNAo2cv9Bhoy2XyEmjYnH08Z9ayBc/0rPttlV8vhmhXTSVzcYmT2znOQbTHazc3D84meGmp3nGc6WE/ppHA8=
+  - on:
+      branch: main
+      tags: true
+      repo: tylergrinn/tygr-logo
+    provider: script
+    skip_cleanup: true
+    script: rsync --recursive --delete lib node@tygr.info:@tygr/logo
