@@ -8,7 +8,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const common = {
   output: {
     path: path.join(__dirname, 'lib', 'demo'),
-    filename: '[name].js',
+    filename: '[name].[contenthash].js',
   },
   mode: 'development',
   module: {
@@ -29,13 +29,11 @@ const common = {
     extensions: ['.tsx', '.ts', '.js', '.jsx'],
   },
   devtool: 'source-map',
-  devServer: {
-    clientLogLevel: 'silent',
-    writeToDisk: true,
-    host: '0.0.0.0',
-    contentBase: path.resolve(__dirname, 'lib'),
-  },
-  plugins: [new MiniCssExtractPlugin()],
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: '[name].[contenthash].css',
+    }),
+  ],
 };
 
 const node = merge(common, {
@@ -76,7 +74,6 @@ const sass = merge(common, {
     sass: './demo/sass.ts',
   },
   plugins: [
-    new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
       template: 'demo/sass.html',
       filename: 'sass.html',
