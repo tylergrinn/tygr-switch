@@ -2,9 +2,8 @@ import React from 'react';
 
 export default function TG() {
   return (
-    <div>
+    <div className="tygr-logo">
       <svg
-        className="tygr-logo"
         xmlns="http://www.w3.org/2000/svg"
         height="150px"
         viewBox="-230 -100 1100 800"
