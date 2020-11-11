@@ -88,7 +88,7 @@ You should not use the standalone version if you have multiple react components 
 
 ## Customizing styles
 
-Sass variables can be overridden if you accept responsibility for transpiling it into css. You can see an example of this setup in the `demo/webpack.config.js` configuration named `sass`.
+Sass variables can be overridden if you accept responsibility for transpiling it into css. You can see an example of this setup in the `webpack.config.demo.js` configuration named `sass`.
 
 Make sure to reassign the sass variables before importing the sass file:
 
