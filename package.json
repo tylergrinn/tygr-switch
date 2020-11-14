@@ -1,23 +1,72 @@
 {
   "name": "@tygr/logo",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Logo for tygr",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
     "lib"
   ],
+  "browserslist": [
+    "defaults"
+  ],
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react",
+      "@babel/preset-typescript"
+    ],
+    "plugins": [
+      "@babel/plugin-transform-runtime"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "alloy",
+      "alloy/react",
+      "alloy/typescript"
+    ],
+    "env": {
+      "browser": true
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    },
+    "rules": {
+      "eol-last": [
+        "error",
+        "always"
+      ]
+    },
+    "ignorePatterns": [
+      "lib/*",
+      "webpack.config.js"
+    ]
+  },
+  "prettier": {
+    "singleQuote": true
+  },
   "scripts": {
     "clean": "rimraf lib",
-    "build:plugin": "webpack",
-    "build:demo": "webpack --config webpack.config.demo",
-    "build:all": "run-s build:plugin build:demo",
-    "build": "run-s clean build:all",
+    "ts": "tsc",
+    "ts:w": "npm run ts -- -w",
+    "sass:compile": "sass src/styles/main.scss lib/tygr-logo.min.css",
+    "sass:compile:w": "npm run sass:compile -- --watch",
+    "sass:copy": "copyfiles -u 2 src/styles/**/* lib",
+    "sass:copy:w": "nodemon -e * -x \"npm run sass:copy\" -w src/styles",
+    "sass": "run-p sass:compile sass:copy",
+    "sass:w": "run-p sass:compile:w sass:copy:w",
+    "webpack": "webpack",
+    "webpack:w": "npm run webpack -- -w",
+    "plugin": "run-p ts sass webpack",
+    "plugin:w": "run-p ts:w sass:w webpack:w",
+    "demo": "webpack --config demo/webpack.config",
+    "demo:w": "npm run demo -- -w",
+    "build": "run-s clean plugin demo",
     "serve": "http-server lib",
-    "start:plugin": "webpack --watch",
-    "start:demo": "webpack --watch --config webpack.config.demo",
-    "reload": "reload --dir lib",
-    "start": "npm-run-all --silent build --parallel reload start:plugin start:demo",
+    "start": "npm-run-all plugin -p plugin:w demo:w serve",
     "lint:check": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "lint": "npm run lint:fix",
@@ -39,6 +88,9 @@
   ],
   "author": "Tyler Grinn",
   "license": "ISC",
+  "dependencies": {
+    "react": "16"
+  },
   "devDependencies": {
     "@babel/core": "^7.11.6",
     "@babel/preset-env": "^7.11.5",
@@ -51,6 +103,7 @@
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
     "copy-webpack-plugin": "^6.2.1",
+    "copyfiles": "^2.4.0",
     "css-loader": "^4.3.0",
     "eslint": "^7.9.0",
     "eslint-config-alloy": "^3.8.0",
@@ -59,7 +112,6 @@
     "mini-css-extract-plugin": "^0.11.2",
     "nodemon": "^2.0.4",
     "npm-run-all": "^4.1.5",
-    "optimize-css-assets-webpack-plugin": "^5.0.4",
     "prettier": "^2.1.2",
     "prettier-plugin-organize-imports": "^1.1.1",
     "react-dom": "^17.0.1",
@@ -68,14 +120,9 @@
     "sass": "^1.26.11",
     "sass-loader": "^10.0.2",
     "style-loader": "^1.2.1",
-    "ts-loader": "^8.0.4",
     "typescript": "^4.0.3",
     "webpack": "^5.4.0",
     "webpack-cli": "^3.3.12",
-    "webpack-merge": "^5.1.4",
-    "webpack-node-externals": "^2.5.2"
-  },
-  "optionalDependencies": {
-    "react": "16"
+    "webpack-merge": "^5.1.4"
   }
 }

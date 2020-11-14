@@ -2,7 +2,8 @@
   "compilerOptions": {
     "sourceMap": true,
     "strict": true,
-    "module": "commonjs",
+    "module": "es6",
+    "moduleResolution": "node",
     "target": "esnext",
     "experimentalDecorators": true,
     "declaration": true,

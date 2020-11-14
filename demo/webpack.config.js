@@ -7,7 +7,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const common = {
   output: {
-    path: path.join(__dirname, 'lib', 'demo'),
+    path: path.join(__dirname, '..', 'lib', 'demo'),
     filename: '[name].[contenthash].js',
   },
   mode: 'development',
@@ -38,7 +38,7 @@ const common = {
 
 const node = merge(common, {
   entry: {
-    node: './demo/node.ts',
+    node: './demo/node.tsx',
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -47,11 +47,11 @@ const node = merge(common, {
     }),
     new CopyPlugin({
       patterns: [
-        path.resolve(__dirname, 'demo', 'index.html'),
+        path.resolve(__dirname, 'index.html'),
 
         // Browser config. Does not require its own webpack config object,
         // just copy the required files into the dist directory
-        path.resolve(__dirname, 'demo', 'browser.html'),
+        path.resolve(__dirname, 'browser.html'),
       ],
     }),
   ],
@@ -71,7 +71,7 @@ const standalone = merge(common, {
 
 const sass = merge(common, {
   entry: {
-    sass: './demo/sass.ts',
+    sass: './demo/sass.tsx',
   },
   plugins: [
     new HtmlWebpackPlugin({
