@@ -52,7 +52,7 @@
     "clean": "rimraf lib",
     "ts": "tsc",
     "ts:w": "npm run ts -- -w",
-    "sass:compile": "sass src/styles/main.scss lib/tygr-logo.min.css",
+    "sass:compile": "sass -I node_modules src/styles/main.scss lib/tygr-logo.min.css",
     "sass:compile:w": "npm run sass:compile -- --watch",
     "sass:copy": "copyfiles -u 2 src/styles/**/* lib",
     "sass:copy:w": "nodemon -e * -x \"npm run sass:copy\" -w src/styles",
