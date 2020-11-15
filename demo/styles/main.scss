@@ -1,2 +1,34 @@
-@import 'variables';
 @import '../../lib/main';
+
+@include tabs('.tygr-login', login, register, reset-password) {
+  opacity: 0;
+  transform: scaleY(0);
+}
+
+.tygr-login {
+  [data-tab] {
+    transition: all 1s;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+
+    * {
+      margin: 8px;
+    }
+
+    button {
+      background: none;
+      border: 1px solid black;
+      padding: 8px;
+      background-color: white;
+    }
+
+    button:hover,
+    button.selected {
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+  }
+}

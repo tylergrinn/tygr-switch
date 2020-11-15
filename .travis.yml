@@ -25,7 +25,7 @@ deploy:
   - on:
       branch: main
       tags: true
-      repo: tylergrinn/tygr-logo
+      repo: tylergrinn/tygr-tabs
     provider: npm
     email: tylergrinn@gmail.com
     skip_cleanup: true
@@ -34,7 +34,7 @@ deploy:
   - on:
       branch: main
       tags: true
-      repo: tylergrinn/tygr-logo
+      repo: tylergrinn/tygr-tabs
     provider: script
     skip_cleanup: true
-    script: rsync --recursive --delete lib node@tygr.info:@tygr/logo
+    script: rsync --recursive --delete lib node@tygr.info:@tygr/tabs

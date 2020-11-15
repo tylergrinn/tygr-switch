@@ -1,137 +1,124 @@
-# Tygr Logo
+# Tygr Tab
 
-[Demo](https://tygr.info/download/@tygr/logo/lib/demo)
+[Demo](https://tygr.info/download/@tygr/tabs/lib/demo)
 
 [Forking Guide](docs/forking.md)
 
-This is a react component packaged for three environments: node, browser, and standalone.
+This a simple react hook and sass mixin designed to create tabbed components.
 
-- Node is reccommended. If you are already using react in the project, this library simply exports a react component function you can use directly in jsx.
+The tabbed component will share as much html as it can between the different tabs, allowing for smooth transitions.
 
-- Browser is for fast prototyping in the browser. You can add this component via a script tag. The react and react-dom script tags must be placed before the component script.
-
-- Standalone is for projects that do not use react. It exposes the `mount` function, which takes an HTML element.
-
-## Node
-
-Installation:
+## Installation:
 
 ```cmd
-npm i --save @tygr/logo
+npm i --save @tygr/tabs
 ```
 
 Usage (jsx):
 
-```jsx
-import Logo from '@tygr/logo';
+## Step 1: use the tabs hook in your component
 
-// Import styles. Make sure there is a style loader specified in your
-// webpack config
-import '@tygr/logo/lib/tygr-logo.min.css';
+```jsx
+import useTabs from '@tygr/tabs';
 
 export default function MyComponent() {
+  const [
+    tabContainerAttributes,
+    setTab,
+    LOGIN,
+    REGISTER,
+    RESET_PASSWORD,
+  ] = useTabs('login', 'register', 'reset-password');
+
   return (
-    <div>
-      <h1>Logo usage example</h1>
-      <Logo />
+    <div {...tabContainerAttributes} className="tygr-login">
+      <div>...etc</div>
     </div>
   );
 }
 ```
 
-## Browser
+The `useTabs` hook takes an unspecified number of tab names as parameters. It returns an attributes object to be used for the tab container, a function to set the current tab, and boolean flags for each tab name you passed in. Each flag tells you whether that tab is currently active.
 
-Usage:
+Spread the attributes object returned from the `useTabs` hook over the root element of the tabs container as shown above. Everything within this element will be affected by the `useTabs` hook.
 
-When included via script tag, the component is exposed as a window library named 'TygrLogo'
-
-```html
-<html>
-  <head>
-    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-    <script src="https://tygr.info/download/@tygr/logo/lib/tygr-logo.min.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://tygr.info/download/@tygr/logo/lib/tygr-logo.min.css"
-    />
-  </head>
-  <body>
-    <div id="app"></div>
-
-    <script type="text/babel">
-      ReactDOM.render(<TygrLogo />, document.getElementById('app'));
-    </script>
-  </body>
-</html>
-```
-
-## Standalone
-
-Installation:
-
-```cmd
-npm i --save @tygr/logo
-```
-
-Usage:
-
-```jsx
-
-// Vanilla JS
-import Logo from '@tygr/logo/lib/standalone';
-
-const el = document.getElementById('tygr-logo');
-
-Logo.mount(el);
-
-// Vue
-<template>
-<div>
-  <div ref="tygr-logo"></div>
-</div>
-</template>
-
-<script>
-import Logo from '@tygr/logo/lib/standalone';
-
-export default {
-  mounted() {
-    Logo.mount(this.$refs['tygr-logo']);
-  },
-};
-</script>
-
-// Angular Typescript
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import Logo from '@tygr/logo/lib/standalone';
-
-@Component({
-  selector: 'app-root',
-  template: '<div><div #tygr-logo></div></div>',
-})
-export class LogoComponent  {
-  @ViewChild('tygr-logo') el: ElementRef;
-
-  ngAfterViewInit() {
-    Logo.mount(this.el.nativeElement);
-  }
-}
-```
-
-You should not use the standalone version if you have multiple react components in your project.
-
-## Customizing styles
-
-Sass variables can be overridden if you accept responsibility for transpiling it into css. You can see an example of this setup in the `webpack.config.demo.js` configuration named `sass`.
-
-Make sure to reassign any sass variables before importing the `main.scss` file:
+## Step 2: use the tabs mixin
 
 ```scss
-$accent-1: white;
-$accent-2: yellow;
+@import '@tygr/tabs/lib/main';
 
-@import '@tygr/logo/lib/main';
+@include tabs('.tygr-login', login, register, reset-password);
+```
+
+The mixin takes a selector as a first argument, then a list of tab names. The selector should match the className on the TabContainer component above.
+
+The tab names passed in to the `tabs` mixin must match the ones passed in to the `useTabs` react hook.
+
+## Step 3: hide and show elements conditionally using `data-tab`
+
+```jsx
+<form>
+  <label htmlFor="password" data-tab="login register">
+    Password
+  </label>
+  <input id="password" data-tab="login register" type="password" />
+
+  <label htmlFor="repeat-password" data-tab="register">
+    Repeat Password
+  </label>
+  <input id="repeat-password" data-tab="register" type="password" />
+</form>
+```
+
+For elements you want to conditionally show or hide, add the `data-tab` attribute with a list of the tab names you would like it to show up under. In this example, the `password` field will be shown if the tab is either `login` or `register` but not `reset-password`. Likewise, the `confirm-password` field will only be shown when the `register` tab is active.
+
+## Step 4: Add buttons to change tabs
+
+```jsx
+<div className="header">
+  <button onClick={setTab('login')}>Login</button>
+  <button onClick={setTab('register')}>Register</button>
+  <button onClick={setTab('reset-password')}>Reset Password</button>
+</div>
+```
+
+Use the `setTab` higher order function returned from the `useTabs` hook in order to change tabs on button clicks. The method is type-safe if using typescript, so you don't have to memorize which name you gave each tab.
+
+## Optional: Use the tab status flags
+
+Ex 1: Add selected class to current tab button:
+
+```jsx
+<button onClick={setTab('register')} className={REGISTER ? 'selected' : ''}>
+  Register
+</button>
+```
+
+Ex 2: Combine flags for easy to read conditionals:
+
+```jsx
+<input
+  required={LOGIN || REGISTER}
+  id="password"
+  data-tab="login register"
+  type="password"
+/>
+```
+
+## Optional: use custom css logic for hiding elements
+
+By default, an element with the `data-tab=tab-name` attribute for conditional rendering is given the `display: none` css property when the tab is not active.
+
+You may replace that logic with your own by passing content to the `tabs` mixin:
+
+```scss
+@import '@tygr/tabs/lib/main';
+
+.tygr-login[data-tab] {
+  transition: opacity 1s;
+}
+
+@include tabs('.tygr-login', login, register, reset-password) {
+  opacity: 0;
+}
 ```

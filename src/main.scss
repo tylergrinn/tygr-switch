@@ -1,0 +1,16 @@
+@use 'sass:meta';
+@use 'sass:list';
+
+@mixin tabs($selector, $tabs...) {
+  @for $i from 1 through length($tabs) {
+    $tab: nth($tabs, $i);
+
+    #{$selector}[data-#{$tab}] [data-tab]:not([data-tab~='#{$tab}']) {
+      @if (content-exists()) {
+        @content;
+      } @else {
+        display: none;
+      }
+    }
+  }
+}

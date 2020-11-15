@@ -1,9 +1,9 @@
 {
-  "name": "@tygr/logo",
-  "version": "1.1.4",
-  "description": "Logo for tygr",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "name": "@tygr/tabs",
+  "version": "0.0.0",
+  "description": "Tab hook and sass mixin",
+  "main": "lib/use-tabs.js",
+  "types": "lib/use-tabs.d.ts",
   "files": [
     "lib"
   ],
@@ -52,16 +52,10 @@
     "clean": "rimraf lib",
     "ts": "tsc",
     "ts:w": "npm run ts -- -w",
-    "sass:compile": "sass -I node_modules --style=compressed src/styles/main.scss lib/tygr-logo.min.css",
-    "sass:compile:w": "npm run sass:compile -- --watch",
-    "sass:copy": "copyfiles -u 2 src/styles/**/* lib",
-    "sass:copy:w": "nodemon -e * -x \"npm run sass:copy\" -w src/styles",
-    "sass": "run-p sass:compile sass:copy",
-    "sass:w": "run-p sass:compile:w sass:copy:w",
-    "webpack": "webpack",
-    "webpack:w": "npm run webpack -- -w",
-    "plugin": "run-p ts sass webpack",
-    "plugin:w": "run-p ts:w sass:w webpack:w",
+    "sass": "copyfiles -u 1 src/main.scss lib",
+    "sass:w": "nodemon -e * -x \"npm run sass\" -w src/styles",
+    "plugin": "run-p ts sass",
+    "plugin:w": "run-p ts:w sass:w",
     "demo": "webpack --config demo/webpack.config",
     "demo:w": "npm run demo -- -w",
     "build": "run-s clean plugin demo",
@@ -80,7 +74,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com/tylergrinn/tygr-logo.git"
+    "url": "git@github.com/tylergrinn/tygr-tabs.git"
   },
   "keywords": [
     "react",
@@ -105,7 +99,6 @@
     "@typescript-eslint/parser": "^4.2.0",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
-    "copy-webpack-plugin": "^6.2.1",
     "copyfiles": "^2.4.0",
     "css-loader": "^4.3.0",
     "eslint": "^7.9.0",
@@ -125,7 +118,6 @@
     "style-loader": "^1.2.1",
     "typescript": "^4.0.3",
     "webpack": "^5.4.0",
-    "webpack-cli": "^3.3.12",
-    "webpack-merge": "^5.1.4"
+    "webpack-cli": "^3.3.12"
   }
 }
