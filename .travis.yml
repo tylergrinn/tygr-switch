@@ -19,7 +19,7 @@ before_deploy:
 
 script:
   - npm run quality:check
-  - npm run build
+  - NODE_ENV=production npm run build
 
 deploy:
   - on:
