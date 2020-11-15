@@ -1,6 +1,6 @@
 {
   "name": "@tygr/tabs",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Tab hook and sass mixin",
   "main": "lib/use-tabs.js",
   "types": "lib/use-tabs.d.ts",
