@@ -1,6 +1,6 @@
 # Forking this repository
 
-**These instructions and the setup script are written for the respository 'tylergrinn/tygr-logo' and won't work for any forked repositories.**
+**These instructions and the setup script are written for the respository [tylergrinn/tygr-logo](https://github.com/tylergrinn/tygr-logo) and won't work for any forked repositories.**
 
 In other words, don't _fork a fork_ of this repository and expect the setup script or deployment to work.
 

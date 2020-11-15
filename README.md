@@ -14,11 +14,10 @@ The tabbed component will share as much html as it can between the different tab
 npm i --save @tygr/tabs
 ```
 
-Usage (jsx):
-
 ## Step 1: use the tabs hook in your component
 
 ```jsx
+import React from 'react';
 import useTabs from '@tygr/tabs';
 
 export default function MyComponent() {
@@ -119,6 +118,35 @@ You may replace that logic with your own by passing content to the `tabs` mixin:
 }
 
 @include tabs('.tygr-login', login, register, reset-password) {
+  /**
+   * These styles are applied when the data-tab
+   * attribute *DOES NOT* match the current tab
+   */
   opacity: 0;
 }
 ```
+
+## Optional: set an initial tab programmatically
+
+By default, the tab shown is the first one in the list. You can override that by calling the `setTab` function within a react effect that runs only once when the component is created:
+
+```js
+import React from 'react';
+import useTabs from '@tygr/tabs';
+
+export default function MyComponent() {
+  const [
+    tabContainerAttributes,
+    setTab,
+    LOGIN,
+    REGISTER,
+    RESET_PASSWORD,
+  ] = useTabs('login', 'register', 'reset-password');
+
+  useEffect(setTab('register'), []);
+}
+```
+
+By passing in an empty list to the `dependencies` parameter of `useEffect`, the effect will not be run for any prop or state updates.
+
+This is useful if you are allowing the consumer of the component to pass in an initial tab via a prop.
