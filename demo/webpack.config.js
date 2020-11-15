@@ -5,6 +5,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+const PROD = process.env.NODE_ENV === 'production';
+
 const common = {
   output: {
     path: path.join(__dirname, '..', 'lib', 'demo'),
@@ -28,7 +30,7 @@ const common = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.jsx'],
   },
-  devtool: 'source-map',
+  devtool: PROD ? false : 'source-map',
   plugins: [
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',
