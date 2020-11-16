@@ -9,7 +9,7 @@ const PROD = process.env.NODE_ENV === 'production';
 module.exports = {
   entry: path.resolve(__dirname, 'index.ts'),
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, '..', 'dist'),
     filename: '[name].[contenthash].js',
   },
   mode: PROD ? 'production' : 'development',

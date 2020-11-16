@@ -51,7 +51,7 @@
     "singleQuote": true
   },
   "scripts": {
-    "clean": "rimraf index.d.ts index.js demo/dist",
+    "clean": "rimraf index.d.ts index.js dist",
     "ts": "tsc",
     "demo": "webpack --config demo/webpack.config",
     "demo:w": "webpack-dev-server --config demo/webpack.config",
