@@ -46,4 +46,4 @@ jobs:
           repo: tylergrinn/tygr-tabs
         provider: script
         skip_cleanup: true
-        script: rsync --recursive --delete lib node@tygr.info:@tygr/tabs
+        script: rsync --recursive --delete lib/ node@tygr.info:@tygr/tabs
