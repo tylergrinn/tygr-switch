@@ -3,19 +3,13 @@ dist: xenial
 language: node_js
 node_js: lts/*
 
-script:
-  - npm run quality:check
-  - NODE_ENV=production npm run build
-
 # SSH Setup
 addons:
   ssh_known_hosts: tygr.info
 
-before_deploy:
-  - echo $SSH_KEY | base64 -d > /tmp/deploy_rsa
-  - eval "$(ssh-agent -s)"
-  - chmod 600 /tmp/deploy_rsa
-  - ssh-add /tmp/deploy_rsa
+script:
+  - npm run quality:check
+  - NODE_ENV=production npm run build
 
 deploy:
   - provider: npm
@@ -26,9 +20,10 @@ deploy:
     edge: true
     email: tylergrinn@gmail.com
     api_token: $NPM_TOKEN
+
   - provider: script
     on:
       branch: main
       repo: tylergrinn/tygr-tabs
     edge: true
-    script: rsync --recursive --delete dist/ node@tygr.info:@tygr/tabs
+    script: bash deploy.sh
