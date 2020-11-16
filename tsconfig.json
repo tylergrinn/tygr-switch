@@ -5,8 +5,6 @@
     "moduleResolution": "node",
     "target": "esnext",
     "experimentalDecorators": true,
-    "declaration": true,
-    "outDir": "./lib",
     "jsx": "react",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -15,5 +13,5 @@
     "esModuleInterop": true,
     "allowJs": true
   },
-  "include": ["src/**/*.ts"]
+  "include": ["index.ts"]
 }

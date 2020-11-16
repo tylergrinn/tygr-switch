@@ -1,0 +1,23 @@
+@use 'sass:meta';
+@use 'sass:list';
+
+@mixin tabs($tabs...) {
+  @each $tab in $tabs {
+    /**
+     * When [data-tab-$tab] is found, all children with the [data-tab] attribute
+     * who's value does *NOT* include $tab, apply these styles
+     */
+    &[data-tab-#{$tab}],
+    & [data-tab-#{$tab}] {
+      [data-tab]:not([data-tab~='#{$tab}']) {
+        // If content is passed in, use it for tab element behavior when not on the active tab
+        @if (content-exists()) {
+          @content;
+        } @else {
+          // default tab element behavior when not on the active tab
+          display: none;
+        }
+      }
+    }
+  }
+}

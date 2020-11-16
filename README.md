@@ -10,10 +10,10 @@ The tabbed component will share as much html as it can between the different tab
 
 ## Requirements:
 
-- A react application built with node
+- A react application built with node (webpack, rollup, babel)
 - Sass compiler
 
-See the `demo/webpack.config.js` file for an example of using sass with webpack.
+See the `demo/webpack.config.js` file for an example of using react and sass with webpack. The `package.json` has the babel config.
 
 ## Installation:
 
@@ -27,17 +27,15 @@ npm i --save @tygr/tabs
 import React from 'react';
 import useTabs from '@tygr/tabs';
 
-export default function MyComponent() {
-  const [
-    tabContainerAttributes,
-    setTab,
-    LOGIN,
-    REGISTER,
-    RESET_PASSWORD,
-  ] = useTabs('login', 'register', 'reset-password');
+export default function Auth() {
+  const [attributes, setTab, LOGIN, REGISTER, RESET_PASSWORD] = useTabs(
+    'login',
+    'register',
+    'reset-password'
+  );
 
   return (
-    <div {...tabContainerAttributes} className="tygr-login">
+    <div {...attributes} className="tygr-auth">
       <div>...etc</div>
     </div>
   );
@@ -46,46 +44,34 @@ export default function MyComponent() {
 
 The `useTabs` hook takes an unspecified number of tab names as parameters. It returns an attributes object to be used for the tab container, a function to set the current tab, and boolean flags for each tab name you passed in. Each flag tells you whether that tab is currently active.
 
-Spread the attributes object returned from the `useTabs` hook over the root element of the tabs container as shown above. Everything within this element will be affected by the `useTabs` hook.
+Spread the `attributes` object returned from the `useTabs` hook over the root element of the tabs container as shown above.
 
-## Step 2: use the tabs mixin
+## Step 2: use the tabs sass mixin
 
 ```scss
-@import '@tygr/tabs/lib/main';
+@use '@tygr/tabs';
 
-@include tabs('.tygr-login', login, register, reset-password);
+.tygr-auth {
+  @include tabs(login, register, reset-password);
+}
 ```
 
-The mixin takes a selector as a first argument, then a list of tab names. The selector should match the className on the TabContainer component above.
-
-The tab names passed in to the `tabs` mixin must match the ones passed in to the `useTabs` react hook.
+The tab names passed in to the `tabs` mixin must match the ones passed in to the `useTabs` react hook. You should always enclose this mixin within a selector, just like above, because it makes use of the sass parent selector: `&`.
 
 ## Step 3: hide and show elements conditionally using `data-tab`
 
 ```jsx
-<form>
-  <label htmlFor="password" data-tab="login register">
-    Password
-  </label>
-  <input id="password" data-tab="login register" type="password" />
+<input data-tab="login register" name="password" />
 
-  <label htmlFor="repeat-password" data-tab="register">
-    Repeat Password
-  </label>
-  <input id="repeat-password" data-tab="register" type="password" />
-</form>
+<input data-tab="register" name="confirm-password" />
 ```
 
-For elements you want to conditionally show or hide, add the `data-tab` attribute with a list of the tab names you would like it to show up under. In this example, the `password` field will be shown if the tab is either `login` or `register` but not `reset-password`. Likewise, the `confirm-password` field will only be shown when the `register` tab is active.
+For elements you want to conditionally show or hide, add the `data-tab` attribute with a list of the tab names you would like it to show up under. In this example, the `password` input will be shown if the tab is either `login` or `register`. Likewise, the `confirm-password` input will only be shown when the `register` tab is active.
 
-## Step 4: Add buttons to change tabs
+## Step 4: Use the setTab function to change tabs
 
 ```jsx
-<div className="header">
-  <button onClick={setTab('login')}>Login</button>
-  <button onClick={setTab('register')}>Register</button>
-  <button onClick={setTab('reset-password')}>Reset Password</button>
-</div>
+<button onClick={setTab('reset-password')}>Reset Password</button>
 ```
 
 Use the `setTab` higher order function returned from the `useTabs` hook in order to change tabs on button clicks. The method is type-safe if using typescript, so you don't have to memorize which name you gave each tab.
@@ -95,7 +81,7 @@ Use the `setTab` higher order function returned from the `useTabs` hook in order
 Ex 1: Add selected class to current tab button:
 
 ```jsx
-<button onClick={setTab('register')} className={REGISTER ? 'selected' : ''}>
+<button onClick={setTab('register')} className={REGISTER && 'selected'}>
   Register
 </button>
 ```
@@ -117,29 +103,92 @@ By default, an element with the `data-tab=tab-name` attribute for conditional re
 
 You may replace that logic with your own by passing content to the `tabs` mixin:
 
+Ex 1: Using transitions
+
 ```scss
-@import '@tygr/tabs/lib/main';
+@import '@tygr/tabs';
 
-.tygr-login[data-tab] {
-  transition: opacity 1s;
-}
+.tygr-auth {
+  [data-tab] {
+    transition: opacity 1s;
+  }
 
-@include tabs('.tygr-login', login, register, reset-password) {
-  /**
-   * These styles are applied when the data-tab
-   * attribute *DOES NOT* match the current tab
-   */
-  opacity: 0;
+  @include tabs(login, register, reset-password) {
+    /**
+    * These styles are applied when the data-tab
+    * attribute *DOES NOT* match the current tab
+    */
+    opacity: 0;
+  }
 }
 ```
 
-You can split the sass mixin
+Ex 2: Using animations
+
+```scss
+@import '@tygr/tabs';
+
+.tygr-auth {
+  [data-tab] {
+    animation: _fade-in 1s;
+  }
+
+  @include tabs(login, register, reset-password) {
+    animation: _fade-out 1s forwards;
+  }
+}
+
+@keyframes _fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes _fade-out {
+  to {
+    opacity: 0;
+  }
+}
+```
+
+You can split the sass mixin into multiple calls to apply different transitions for different tabs becoming active:
+
+```scss
+@import '@tygr/tabs';
+
+.tygr-login {
+  // Fade in and out when switching to and from the login and register tabs
+  @include tabs(login, register) {
+    opacity: 0;
+  }
+
+  // Shrink and expand when switching to and from the reset-password tab
+  @include tabs(reset-password) {
+    transform: scaleY(0);
+  }
+
+  [data-tab] {
+    /*
+     * When switching between types of transition effects, both sets of rules will
+     * apply. In a way, it will blend both effects.
+     */
+    transition: opacity 1s, transform 1s;
+  }
+}
+```
 
 ## Optional: set an initial tab programmatically
 
 By default, the tab shown is the first one in the list. You can override that by calling the `setTab` function within a react effect that runs only once when the component is created:
 
-```js
+```jsx
+import React, { useEffect } from 'react';
+
+...
+
 useEffect(setTab('register'), []);
 ```
 

@@ -7,12 +7,7 @@ addons:
 
 # SSH Setup
 before_deploy:
-  - openssl aes-256-cbc
-    -K $encrypted_db2095f63ba3_key
-    -iv $encrypted_db2095f63ba3_iv
-    -in deploy_rsa.enc
-    -out /tmp/deploy_rsa
-    -d
+  - echo $SSH_KEY > /tmp/deploy_rsa
   - eval "$(ssh-agent -s)"
   - chmod 600 /tmp/deploy_rsa
   - ssh-add /tmp/deploy_rsa
@@ -21,29 +16,19 @@ script:
   - npm run quality:check
   - NODE_ENV=production npm run build
 
-jobs:
-  include:
-    - name: quality
-      script: npm run quality:check
-
-    - name: npm
-      if: branch = main AND tag IS present
-      script: NODE_ENV=production npm run build
-      deploy:
-        on:
-          repo: tylergrinn/tygr-tabs
-        provider: npm
-        email: tylergrinn@gmail.com
-        skip_cleanup: true
-        api_token:
-          secure: rvygY5ovag7nCBOtaQgZcoMp/ijTH/pp/2Klj/Y/7HOC9+4E2AlLr+d3mODPZPr4f4R6io5rymxP18llBNt7Kn/eMsurSi4Z/C5PK4d4DQIrkE+ElinrsnpLgr1eJbN6R7z5SYUkFRuxExosemwg9H878/4/QI820TOP8t/5idX0K5+BuzSFO4U/NzflBoHrIX1nLVRCSYF870kTFTvA3AD7cVytFjkfqdsQwAA5C5z7sbz9E7mcg7mt+8ZiQtxOD4peHNc1Op9McknBG4O4t+NkJ1XXRDH7rfd92KPODD9M1N4pYEThNR1VwoYLSeh76JYI18mLO/6mpidC3tW/1FNKZbTElefXm9WyvCQuAx2dt10d3oT/pkRpj18c11LqopkALkRIUGf7UVHeJOzjrfTih4N/t/6v7FI0XWISb75sKFUM0KrXEhNy9Nev4CKqVm1uYkods6c7CvSPuDu+Z11/ov97RcHpGJnQwmGEuWf57gL64iHYjCxvkECNLTI0ROjXk8Logc3DXc4YbA4esoRhsZZR735WH2Qtaq5tTS6UGpW1c1870KPCWo9QJ2Ok2lepDXpfqpiHg1iz+3MshD+R6YFFdsZIMrm6OBXkJy4ZX1fzYiEaJBU6pL+gFJFOtpvb89xyOfmXVrAtcP7pxzovSAvRKIRxZwKF9maEGHo=
-
-    - name: demo
-      if: branch = main
-      script: NODE_ENV=production npm run build:all
-      deploy:
-        on:
-          repo: tylergrinn/tygr-tabs
-        provider: script
-        skip_cleanup: true
-        script: rsync --recursive --delete lib/ node@tygr.info:@tygr/tabs
+deploy:
+  - on:
+      branch: main
+      tags: true
+      repo: tylergrinn/tygr-tabs
+    provider: npm
+    email: tylergrinn@gmail.com
+    skip_cleanup: true
+    api_token:
+      secure: rvygY5ovag7nCBOtaQgZcoMp/ijTH/pp/2Klj/Y/7HOC9+4E2AlLr+d3mODPZPr4f4R6io5rymxP18llBNt7Kn/eMsurSi4Z/C5PK4d4DQIrkE+ElinrsnpLgr1eJbN6R7z5SYUkFRuxExosemwg9H878/4/QI820TOP8t/5idX0K5+BuzSFO4U/NzflBoHrIX1nLVRCSYF870kTFTvA3AD7cVytFjkfqdsQwAA5C5z7sbz9E7mcg7mt+8ZiQtxOD4peHNc1Op9McknBG4O4t+NkJ1XXRDH7rfd92KPODD9M1N4pYEThNR1VwoYLSeh76JYI18mLO/6mpidC3tW/1FNKZbTElefXm9WyvCQuAx2dt10d3oT/pkRpj18c11LqopkALkRIUGf7UVHeJOzjrfTih4N/t/6v7FI0XWISb75sKFUM0KrXEhNy9Nev4CKqVm1uYkods6c7CvSPuDu+Z11/ov97RcHpGJnQwmGEuWf57gL64iHYjCxvkECNLTI0ROjXk8Logc3DXc4YbA4esoRhsZZR735WH2Qtaq5tTS6UGpW1c1870KPCWo9QJ2Ok2lepDXpfqpiHg1iz+3MshD+R6YFFdsZIMrm6OBXkJy4ZX1fzYiEaJBU6pL+gFJFOtpvb89xyOfmXVrAtcP7pxzovSAvRKIRxZwKF9maEGHo=
+  - on:
+      branch: main
+      repo: tylergrinn/tygr-tabs
+    provider: script
+    skip_cleanup: true
+    script: rsync --recursive --delete lib/ node@tygr.info:@tygr/tabs

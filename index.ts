@@ -8,22 +8,22 @@ export default function useTabs<Tab extends string>(
   /**
    * Creates a single key-value pair corresponding to the current tab in the form of:
    *
-   * <div data-[currentTab]="true">
+   * <div data-tab-[currentTab]="true">
    *
    * If the current tab is 'login', the object will be:
    * {
-   *   'data-login': true,
+   *   'data-tab-login': true,
    * }
    *
    * Add these attributes to your tab container:
    *
    * <div class="tab-container" {...attributes}>
-   *   ... tab content
+   *   ...tab content
    * </div>
    */
   const attributes = tabs.reduce((attrs, t) => {
     if (currentTab === t) {
-      attrs[`data-${t}`] = true;
+      attrs[`data-tab-${t}`] = true;
     }
     return attrs;
   }, {} as any);

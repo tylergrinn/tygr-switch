@@ -1,0 +1,62 @@
+@import '../';
+
+.tygr-login {
+  // Styles applied to all [data-tab] elements
+  [data-tab] {
+    transition: all 0.3s;
+    max-height: 32px;
+    overflow: visible;
+
+    // animation: _fade-in 1s;
+  }
+
+  // Styles applied to [data-tab] elements when tab is *INACTIVE*
+  @include tabs(login, register, reset-password) {
+    opacity: 0;
+    max-height: 0;
+    margin: 0 8px;
+    border: none;
+    padding: 0;
+
+    // animation: _fade-out 1s forwards;
+  }
+
+  .header button {
+    background: none;
+    border: 1px solid black;
+    padding: 8px;
+    background-color: white;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+    &.selected {
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+
+    * {
+      margin: 8px;
+    }
+  }
+}
+
+@keyframes _fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes _fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

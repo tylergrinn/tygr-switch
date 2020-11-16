@@ -1,6 +1,7 @@
-/lib
-dist
 node_modules
-debug.log
-.env
+
+dist
+/index.d.ts
+/index.js
+
 .vscode

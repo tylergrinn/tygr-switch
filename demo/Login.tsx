@@ -32,27 +32,27 @@ export default function Login() {
   };
 
   return (
-    <div {...tabAttributes} className="tygr-login">
-      <form onSubmit={onSubmit}>
+    <div className="tygr-login">
+      <form {...tabAttributes} onSubmit={onSubmit}>
         <div className="header">
           <button
             onClick={setTab('login')}
             type="button"
-            className={LOGIN ? 'selected' : ''}
+            className={LOGIN && 'selected'}
           >
             Login
           </button>
           <button
             onClick={setTab('register')}
             type="button"
-            className={REGISTER ? 'selected' : ''}
+            className={REGISTER && 'selected'}
           >
             Register
           </button>
           <button
             onClick={setTab('reset-password')}
             type="button"
-            className={RESET_PASSWORD ? 'selected' : ''}
+            className={RESET_PASSWORD && 'selected'}
           >
             Reset Password
           </button>

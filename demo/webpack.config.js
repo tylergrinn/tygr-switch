@@ -2,16 +2,17 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const PROD = process.env.NODE_ENV === 'production';
 
 module.exports = {
-  entry: './demo/index.ts',
+  entry: path.resolve(__dirname, 'index.ts'),
   output: {
-    path: path.join(__dirname, '..', 'lib'),
+    path: path.resolve(__dirname, 'dist'),
     filename: '[name].[contenthash].js',
   },
-  mode: 'development',
+  mode: PROD ? 'production' : 'development',
   module: {
     rules: [
       {
@@ -39,13 +40,14 @@ module.exports = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.jsx', '.scss', '.css'],
   },
-  devtool: PROD ? false : 'source-map',
+  devtool: 'source-map',
   plugins: [
+    new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',
     }),
     new HtmlWebpackPlugin({
-      template: 'demo/index.html',
+      template: path.resolve(__dirname, 'index.html'),
     }),
   ],
 };
