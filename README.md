@@ -1,6 +1,6 @@
 # Tygr Tabs
 
-[Demo](https://tygr.info/download/@tygr/tabs/lib/demo)
+[Demo](https://tygr.info/@tygr/tabs)
 
 [Forking Guide](https://github.com/tylergrinn/tygr-logo/blob/main/docs/forking.md)
 
