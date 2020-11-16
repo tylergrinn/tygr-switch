@@ -17,18 +17,18 @@ script:
   - NODE_ENV=production npm run build
 
 deploy:
-  - on:
+  - provider: npm
+    on:
       branch: main
       tags: true
       repo: tylergrinn/tygr-tabs
-    provider: npm
+    edge: true
     email: tylergrinn@gmail.com
-    skip_cleanup: true
     api_token:
       secure: rvygY5ovag7nCBOtaQgZcoMp/ijTH/pp/2Klj/Y/7HOC9+4E2AlLr+d3mODPZPr4f4R6io5rymxP18llBNt7Kn/eMsurSi4Z/C5PK4d4DQIrkE+ElinrsnpLgr1eJbN6R7z5SYUkFRuxExosemwg9H878/4/QI820TOP8t/5idX0K5+BuzSFO4U/NzflBoHrIX1nLVRCSYF870kTFTvA3AD7cVytFjkfqdsQwAA5C5z7sbz9E7mcg7mt+8ZiQtxOD4peHNc1Op9McknBG4O4t+NkJ1XXRDH7rfd92KPODD9M1N4pYEThNR1VwoYLSeh76JYI18mLO/6mpidC3tW/1FNKZbTElefXm9WyvCQuAx2dt10d3oT/pkRpj18c11LqopkALkRIUGf7UVHeJOzjrfTih4N/t/6v7FI0XWISb75sKFUM0KrXEhNy9Nev4CKqVm1uYkods6c7CvSPuDu+Z11/ov97RcHpGJnQwmGEuWf57gL64iHYjCxvkECNLTI0ROjXk8Logc3DXc4YbA4esoRhsZZR735WH2Qtaq5tTS6UGpW1c1870KPCWo9QJ2Ok2lepDXpfqpiHg1iz+3MshD+R6YFFdsZIMrm6OBXkJy4ZX1fzYiEaJBU6pL+gFJFOtpvb89xyOfmXVrAtcP7pxzovSAvRKIRxZwKF9maEGHo=
-  - on:
+  - provider: script
+    on:
       branch: main
       repo: tylergrinn/tygr-tabs
-    provider: script
-    skip_cleanup: true
-    script: rsync --recursive --delete lib/ node@tygr.info:@tygr/tabs
+    edge: true
+    script: rsync --recursive --delete demo/dist/ node@tygr.info:@tygr/tabs
