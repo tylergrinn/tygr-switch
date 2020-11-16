@@ -2,9 +2,7 @@
 @use 'sass:list';
 
 @mixin tabs($selector, $tabs...) {
-  @for $i from 1 through length($tabs) {
-    $tab: nth($tabs, $i);
-
+  @each $tab in $tabs {
     #{$selector}[data-#{$tab}] [data-tab]:not([data-tab~='#{$tab}']) {
       @if (content-exists()) {
         @content;

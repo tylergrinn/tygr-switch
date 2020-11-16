@@ -8,7 +8,7 @@ const PROD = process.env.NODE_ENV === 'production';
 module.exports = {
   entry: './demo/index.ts',
   output: {
-    path: path.join(__dirname, '..', 'lib', 'demo'),
+    path: path.join(__dirname, '..', 'lib'),
     filename: '[name].[contenthash].js',
   },
   mode: 'development',
@@ -21,12 +21,23 @@ module.exports = {
       },
       {
         test: /\.s?[ac]ss$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              sassOptions: {
+                outputStyle: PROD ? 'compressed' : 'expanded',
+              },
+            },
+          },
+        ],
       },
     ],
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js', '.jsx'],
+    extensions: ['.tsx', '.ts', '.js', '.jsx', '.scss', '.css'],
   },
   devtool: PROD ? false : 'source-map',
   plugins: [
