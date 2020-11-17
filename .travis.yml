@@ -21,9 +21,10 @@ deploy:
     email: tylergrinn@gmail.com
     api_token: $NPM_TOKEN
 
-  - provider: script
+  - provider: pages
     on:
       branch: main
       repo: tylergrinn/tygr-tabs
     edge: true
-    script: bash deploy.sh
+    github_token: $GITHUB_TOKEN
+    local_dir: dist

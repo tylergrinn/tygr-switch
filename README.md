@@ -1,6 +1,6 @@
 # Tygr Tabs
 
-[Demo](https://tygr.info/@tygr/tabs)
+[Demo](https://tylergrinn.github.io/tygr-tabs)
 
 [Forking Guide](https://github.com/tylergrinn/tygr-logo/blob/main/docs/forking.md)
 
@@ -159,7 +159,7 @@ You can split the sass mixin into multiple calls to apply different transitions 
 ```scss
 @import '@tygr/tabs';
 
-.tygr-login {
+.tygr-auth {
   // Fade in and out when switching to and from the login and register tabs
   @include tabs(login, register) {
     opacity: 0;

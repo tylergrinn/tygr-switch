@@ -1,6 +1,6 @@
 {
   "name": "@tygr/tabs",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Tab hook and sass mixin",
   "main": "index.js",
   "types": "index.ts",
@@ -70,7 +70,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com/tylergrinn/tygr-tabs.git"
+    "url": "https://github.com/tylergrinn/tygr-tabs.git"
   },
   "keywords": [
     "react",
