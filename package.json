@@ -1,6 +1,6 @@
 {
-  "name": "@tygr/tabs",
-  "version": "2.1.1",
+  "name": "@tygr/switch",
+  "version": "0.0.0",
   "description": "Tab hook and sass mixin",
   "main": "index.js",
   "types": "index.ts",
@@ -43,7 +43,8 @@
       ]
     },
     "ignorePatterns": [
-      "lib/*",
+      "/lib",
+      "/dist",
       "webpack.config.js"
     ]
   },
@@ -51,7 +52,7 @@
     "singleQuote": true
   },
   "scripts": {
-    "clean": "rimraf index.d.ts index.js dist",
+    "clean": "rimraf index.js dist",
     "ts": "tsc",
     "demo": "webpack --config demo/webpack.config",
     "demo:w": "webpack-dev-server --config demo/webpack.config",
@@ -70,7 +71,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/tylergrinn/tygr-tabs.git"
+    "url": "https://github.com/tylergrinn/tygr-switch.git"
   },
   "keywords": [
     "react",

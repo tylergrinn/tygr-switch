@@ -1,40 +1,32 @@
 import { useState } from 'react';
 
-export default function useTabs<Tab extends string>(
-  ...tabs: Tab[]
-): [any, (tab: Tab) => () => void, ...boolean[]] {
-  const [currentTab, setTab] = useState(tabs[0]);
+interface SwitchOptions {
+  name: string;
+  initialIndex?: number;
+}
 
-  /**
-   * Creates a single key-value pair corresponding to the current tab in the form of:
-   *
-   * <div data-tab-[currentTab]="true">
-   *
-   * If the current tab is 'login', the object will be:
-   * {
-   *   'data-tab-login': true,
-   * }
-   *
-   * Add these attributes to your tab container:
-   *
-   * <div class="tab-container" {...attributes}>
-   *   ...tab content
-   * </div>
-   */
-  const attributes = tabs.reduce((attrs, t) => {
-    if (currentTab === t) {
-      attrs[`data-tab-${t}`] = true;
-    }
-    return attrs;
-  }, {} as any);
-
-  // Maps each tab name to a boolean value if it is the current tab
-  const flags = tabs.map((t) => t === currentTab);
+/**
+ *
+ * @param {Object} options Optional options object
+ * @param {string} options.name The base name of the switch. By default, this is just 'switch'.
+ * Use the data-[name] attribute to conditionally show or hide content
+ * @param {number} options.initialIndex index of the initial state
+ * @param {...string} states Specify all the different states this switch can be in
+ */
+export default function useSwitch<State extends string>(
+  options: SwitchOptions,
+  ...states: State[]
+): [any, (s: State) => () => void, ...boolean[]] {
+  const { name } = options;
+  const initialIndex = options.initialIndex || 0;
+  const [currentState, setState] = useState(states[initialIndex]);
 
   return [
-    attributes,
+    // Attributes object: spread over the rooat element of your switch container
+    { [`data-${name}-${currentState}`]: true },
     // Using a higher order function to clean up syntax in jsx
-    (t) => () => setTab(t),
-    ...flags,
+    (s) => () => setState(s),
+    // Maps each tab name to a boolean value if it is the current tab
+    ...states.map((s) => s === currentState),
   ];
 }

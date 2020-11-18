@@ -1,8 +1,33 @@
 @import '../';
 
+html,
+body,
+#app {
+  height: 100%;
+  background-color: #423d5c;
+}
+
+body {
+  margin: 0;
+}
+
+#app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .tygr-login {
-  // Styles applied to all [data-tab] elements
-  [data-tab] {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+
+  * {
+    margin: 8px;
+  }
+
+  // Styles applied to all [data-auth] elements
+  [data-auth] {
     transition: all 0.3s;
     max-height: 32px;
     overflow: visible;
@@ -10,8 +35,8 @@
     // animation: _fade-in 1s;
   }
 
-  // Styles applied to [data-tab] elements when tab is *INACTIVE*
-  @include tabs(login, register, reset-password) {
+  // Styles applied to [data-auth] elements when state is *INACTIVE*
+  @include switch('auth', login, register, reset-password) {
     opacity: 0;
     max-height: 0;
     margin: 0 8px;
@@ -32,16 +57,6 @@
     }
     &.selected {
       background-color: rgba(0, 0, 0, 0.2);
-    }
-  }
-
-  form {
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-
-    * {
-      margin: 8px;
     }
   }
 }

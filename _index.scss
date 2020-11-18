@@ -1,21 +1,30 @@
 @use 'sass:meta';
-@use 'sass:list';
 
-@mixin tabs($tabs...) {
-  @each $tab in $tabs {
-    /**
-     * When [data-tab-$tab] is found, all children with the [data-tab] attribute
-     * who's value does *NOT* include $tab, apply these styles
-     */
-    &[data-tab-#{$tab}],
-    & [data-tab-#{$tab}] {
-      [data-tab~='!#{$tab}'],
-      [data-tab]:not([data-tab~='#{$tab}']):not([data-tab*='!']) {
-        // If content is passed in, use it for tab element behavior when not on the active tab
+/**
+ * @param {string} $name The name of the switch
+ * @param {...string} $states A list of states the switch can be in
+ */
+@mixin switch($name, $states...) {
+  @each $state in $states {
+    &[data-#{$name}-#{$state}],
+    & [data-#{$name}-#{$state}] {
+      // State named $state is currently active
+
+      /**
+       * Hide any elements with the data-$name attribute that has the '!$state' exclusionary syntax
+       * in its value
+       */
+      [data-#{$name}~='!#{$state}'],
+
+      /**
+       * If any elements with the data-$name attribute does not have $state in its value, nor is
+       * the value using the exclusionary syntax, then hide it
+       */
+      [data-#{$name}]:not([data-#{$name}~='#{$state}']):not([data-#{$name}*='!']) {
         @if (content-exists()) {
+          // Let mixin consumer override default inactive state styles
           @content;
         } @else {
-          // default tab element behavior when not on the active tab
           display: none;
           pointer-events: none;
         }

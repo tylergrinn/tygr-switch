@@ -1,12 +1,12 @@
-# Tygr Tabs
+# Tygr Switch
 
-[Demo](https://tylergrinn.github.io/tygr-tabs)
+[Demo](https://tylergrinn.github.io/tygr-switch)
 
 [Forking Guide](https://github.com/tylergrinn/tygr-logo/blob/main/docs/forking.md)
 
-This a simple react hook and sass mixin designed to create tabbed components.
+This a simple react hook and sass mixin designed to create switchable layouts.
 
-The tabbed component will share as much html as it can between the different tabs, allowing for smooth transitions.
+The switch layout will share as much html as it can between the different switch, allowing for smooth transitions.
 
 ## Requirements:
 
@@ -18,82 +18,91 @@ See the `demo/webpack.config.js` file for an example of using react and sass wit
 ## Installation:
 
 ```cmd
-npm i --save @tygr/tabs
+npm i --save @tygr/switch
 ```
 
-## Step 1: use the tabs hook in your component
+## Step 1: use the switch hook in your component
 
 ```jsx
 import React from 'react';
-import useTabs from '@tygr/tabs';
+import useSwitch from '@tygr/switch';
 
 export default function Auth() {
-  const [attributes, setTab, LOGIN, REGISTER, RESET_PASSWORD] = useTabs(
+  const [
+    switchContainer,
+    setState,
+    LOGIN,
+    REGISTER,
+    RESET_PASSWORD,
+  ] = useSwitch(
+    { name: 'auth', initialIndex: 2 },
     'login',
     'register',
     'reset-password'
   );
 
   return (
-    <div {...attributes} className="tygr-auth">
-      <div>...etc</div>
+    <div {...switchContainer} className="tygr-auth">
+      ...
     </div>
   );
 }
 ```
 
-The `useTabs` hook takes an unspecified number of tab names as parameters. It returns an attributes object to be used for the tab container, a function to set the current tab, and boolean flags for each tab name you passed in. Each flag tells you whether that tab is currently active.
+The `useSwitch` hook takes an `options` object and any number of `state` strings. The options object requires at least the `name` option. You may also specify the index of the initial state with `initialIndex`. In the example above, 'reset-password' will be the active state by default.
 
-Spread the `attributes` object returned from the `useTabs` hook over the root element of the tabs container as shown above.
+It returns a switch container object, a function to set the current state, and boolean flags for each state you specify. Each flag tells you whether that state is currently active.
 
-## Step 2: use the tabs sass mixin
+Spread the switch container object returned from the `useSwitch` hook over the parent element of the layout as shown above.
+
+## Step 2: use the switch sass mixin
 
 ```scss
-@use '@tygr/tabs';
+@use '@tygr/switch';
 
 .tygr-auth {
-  @include tabs(login, register, reset-password);
+  @include switch('auth', login, register, reset-password);
 }
 ```
 
-The tab names passed in to the `tabs` mixin must match the ones passed in to the `useTabs` react hook. You should always enclose this mixin within a selector, just like above, because it makes use of the sass parent selector: `&`.
+The `switch` sass mixin takes in a name for the switch and a list of all the states it can be in. Both parameters should match the ones passed in to the `useSwitch` react hook. You should always enclose this mixin within a selector, just like above, because it makes use of the sass parent selector: `&`.
 
-## Step 3: hide and show elements conditionally using `data-tab`
+## Step 3: hide and show elements conditionally using `data-[name]`
 
 ```jsx
-<input data-tab="login register" name="password" />
+<input data-auth="login register" name="password" />
 
-<input data-tab="register" name="confirm-password" />
+<input data-auth="register" name="confirm-password" />
 ```
 
-For elements you want to conditionally show or hide, add the `data-tab` attribute with a list of the tab names you would like it to show up under. In this example, the `password` input will be shown if the tab is either `login` or `register`. Likewise, the `confirm-password` input will only be shown when the `register` tab is active.
+For elements you want to conditionally show or hide, add the `data-[name]` attribute with a list of the tab names you would like it to show up under. In this example, with the switch being named `'auth'`, the `password` input will be shown if the tab is either `login` or `register`. Likewise, the `confirm-password` input will only be shown when the `register` tab is active.
 
-## Step 4: Use the setTab function to change tabs
+## Step 4: Use the setState function to change switch states
 
 ```jsx
-<button onClick={setTab('reset-password')}>Reset Password</button>
+<button onClick={setState('reset-password')}>Reset Password</button>
 ```
 
-Use the `setTab` higher order function returned from the `useTabs` hook in order to change tabs on button clicks. The method is type-safe if using typescript, so you don't have to memorize which name you gave each tab.
+Use the `setState` higher order function returned from the `useSwitch` hook in order to change state on button clicks. The method is type-safe if using typescript, so you don't have to memorize which name you gave each state.
 
-## Optional: Use the exclusion syntax for `data-tab`
+## Optional: Use the exclusion syntax for `data-[name]`
 
 ```jsx
-<label htmlFor="confirm-password" data-tab="!login !reset-password">
+<label htmlFor="confirm-password" data-auth="!login !reset-password">
   Confirm Password
 </label>
 ```
 
-By using the `!` operator, you can exclude an element from certain tabs rather than the default additive behavior.
+By using the `!` operator, you can exclude an element from certain state rather than the default additive behavior.
 
-This operator takes precedence: if a single tab is specified with `!`, any additive tabs that are also specified for that element will be ignored.
+This operator takes precedence: if a single state is specified with `!`, any additive states that are also specified for that element will be ignored.
 
-## Optional: Use the tab status flags
+## Optional: Use the status flags
 
-Ex 1: Add selected class to current tab button:
+Ex 1: Add selected class to a button if the register state is active:
 
 ```jsx
-<button onClick={setTab('register')} className={REGISTER && 'selected'}>
+<button onClick={setState('register')} className={REGISTER ? 'selected' : ''}>
   Register
 </button>
 ```
@@ -111,24 +120,24 @@ Ex 2: Combine flags for easy to read conditionals:
 
 ## Optional: use custom css logic for hiding elements
 
-By default, an element with the `data-tab=tab-name` attribute for conditional rendering is given the `display: none` and `pointer-events: none` css properties when the tab is not active.
+By default, an element with the `data-[name]` attribute for conditional rendering is given the `display: none` and `pointer-events: none` css properties when the tab is not active.
 
-You may replace that logic with your own by passing content to the `tabs` mixin:
+You may replace that logic with your own by passing content to the `switch` mixin:
 
 Ex 1: Using transitions
 
 ```scss
-@import '@tygr/tabs';
+@import '@tygr/switch';
 
 .tygr-auth {
-  [data-tab] {
+  [data-auth] {
     transition: opacity 1s;
   }
 
-  @include tabs(login, register, reset-password) {
+  @include switch('auth', login, register, reset-password) {
     /**
-    * These styles are applied when the data-tab
-    * attribute *DOES NOT* match the current tab
+    * These styles are applied when the data-auth
+    * attribute *DOES NOT* match the current state
     */
     opacity: 0;
   }
@@ -138,14 +147,14 @@ Ex 1: Using transitions
 Ex 2: Using animations
 
 ```scss
-@import '@tygr/tabs';
+@import '@tygr/switch';
 
 .tygr-auth {
-  [data-tab] {
+  [data-auth] {
     animation: _fade-in 1s;
   }
 
-  @include tabs(login, register, reset-password) {
+  @include switch('auth', login, register, reset-password) {
     animation: _fade-out 1s forwards;
   }
 }
@@ -166,23 +175,23 @@ Ex 2: Using animations
 }
 ```
 
-You can split the sass mixin into multiple calls to apply different transitions for different tabs becoming active:
+You can split the sass mixin into multiple calls to apply different transitions for different states becoming active:
 
 ```scss
-@import '@tygr/tabs';
+@import '@tygr/switch';
 
 .tygr-auth {
-  // Fade in and out when switching to and from the login and register tabs
-  @include tabs(login, register) {
+  // Fade in and out when switching to and from the login and register states
+  @include switch('auth', login, register) {
     opacity: 0;
   }
 
-  // Shrink and expand when switching to and from the reset-password tab
-  @include tabs(reset-password) {
+  // Shrink and expand when switching to and from the reset-password state
+  @include switch('auth', reset-password) {
     transform: scaleY(0);
   }
 
-  [data-tab] {
+  [data-auth] {
     /*
      * When switching between types of transition effects, both sets of rules will
      * apply. In a way, it will blend both effects.
@@ -191,19 +200,3 @@ You can split the sass mixin into multiple calls to apply different transitions 
   }
 }
 ```
-
-## Optional: set an initial tab programmatically
-
-By default, the tab shown is the first one in the list. You can override that by calling the `setTab` function within a react effect that runs only once when the component is created:
-
-```jsx
-import React, { useEffect } from 'react';
-
-...
-
-useEffect(setTab('register'), []);
-```
-
-By passing in an empty list to the `dependencies` parameter of `useEffect`, the effect will not be run for any prop or state updates.
-
-This is useful if you are allowing the consumer of the component to pass in an initial tab via a prop.

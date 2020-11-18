@@ -12,19 +12,19 @@ script:
   - NODE_ENV=production npm run build
 
 deploy:
-  - provider: npm
-    on:
-      branch: main
-      tags: true
-      repo: tylergrinn/tygr-tabs
-    edge: true
-    email: tylergrinn@gmail.com
-    api_token: $NPM_TOKEN
+  # - provider: npm
+  #   on:
+  #     branch: main
+  #     tags: true
+  #     repo: tylergrinn/tygr-switch
+  #   edge: true
+  #   email: tylergrinn@gmail.com
+  #   api_token: $NPM_TOKEN
 
-  - provider: pages
-    on:
-      branch: main
-      repo: tylergrinn/tygr-tabs
-    edge: true
-    github_token: $GITHUB_TOKEN
-    local_dir: dist
+  # - provider: pages
+  #   on:
+  #     branch: main
+  #     repo: tylergrinn/tygr-switch
+  #   edge: true
+  #   github_token: $GITHUB_TOKEN
+  #   local_dir: dist
