@@ -76,6 +76,18 @@ For elements you want to conditionally show or hide, add the `data-tab` attribut
 
 Use the `setTab` higher order function returned from the `useTabs` hook in order to change tabs on button clicks. The method is type-safe if using typescript, so you don't have to memorize which name you gave each tab.
 
+## Optional: Use the exclusion syntax for `data-tab`
+
+```jsx
+<label htmlFor="confirm-password" data-tab="!login !reset-password">
+  Confirm Password
+</label>
+```
+
+By using the `!` operator, you can exclude an element from certain tabs rather than the default additive behavior.
+
+This operator takes precedence: if a single tab is specified with `!`, any additive tabs that are also specified for that element will be ignored.
+
 ## Optional: Use the tab status flags
 
 Ex 1: Add selected class to current tab button:

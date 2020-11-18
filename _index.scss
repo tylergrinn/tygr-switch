@@ -9,7 +9,8 @@
      */
     &[data-tab-#{$tab}],
     & [data-tab-#{$tab}] {
-      [data-tab]:not([data-tab~='#{$tab}']) {
+      [data-tab~='!#{$tab}'],
+      [data-tab]:not([data-tab~='#{$tab}']):not([data-tab*='!']) {
         // If content is passed in, use it for tab element behavior when not on the active tab
         @if (content-exists()) {
           @content;

@@ -68,14 +68,14 @@ export default function Login() {
           type="text"
         />
 
-        <label htmlFor="password" data-tab="login register">
+        <label htmlFor="password" data-tab="!reset-password">
           Password
         </label>
         <input
           required={LOGIN || REGISTER}
           id="password"
           name="password"
-          data-tab="login register"
+          data-tab="!reset-password"
           value={password}
           onChange={onPasswordChange}
           type="password"
@@ -88,7 +88,7 @@ export default function Login() {
           required={REGISTER}
           id="confirm-password"
           name="confirm-password"
-          data-tab="register"
+          data-tab="!login !reset-password"
           value={confirmPassword}
           onChange={onConfirmPasswordChange}
           type="password"
