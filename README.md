@@ -111,7 +111,7 @@ Ex 2: Combine flags for easy to read conditionals:
 
 ## Optional: use custom css logic for hiding elements
 
-By default, an element with the `data-tab=tab-name` attribute for conditional rendering is given the `display: none` css property when the tab is not active.
+By default, an element with the `data-tab=tab-name` attribute for conditional rendering is given the `display: none` and `pointer-events: none` css properties when the tab is not active.
 
 You may replace that logic with your own by passing content to the `tabs` mixin:
 
