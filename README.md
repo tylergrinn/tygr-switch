@@ -70,12 +70,12 @@ The `switch` sass mixin takes in a name for the switch and a list of all the sta
 ## Step 3: hide and show elements conditionally using `data-[name]`
 
 ```jsx
-<input data-auth="login register" name="password" />
+<input name="password" data-auth="login register" />
 
-<input data-auth="register" name="confirm-password" />
+<input name="confirm-password" data-auth="register" />
 ```
 
-For elements you want to conditionally show or hide, add the `data-[name]` attribute with a list of the tab names you would like it to show up under. In this example, with the switch being named `'auth'`, the `password` input will be shown if the tab is either `login` or `register`. Likewise, the `confirm-password` input will only be shown when the `register` tab is active.
+For elements you want to conditionally show or hide, add the `data-[name]` attribute with a list of the state names you would like it to show up under. In this example, with the switch being named `'auth'`, the `password` input will be shown if the state is either `login` or `register`. Likewise, the `confirm-password` input will only be shown when the `register` state is active.
 
 ## Step 4: Use the setState function to change switch states
 
@@ -113,14 +113,14 @@ Ex 2: Combine flags for easy to read conditionals:
 <input
   required={LOGIN || REGISTER}
   id="password"
-  data-tab="login register"
+  data-auth="login register"
   type="password"
 />
 ```
 
 ## Optional: use custom css logic for hiding elements
 
-By default, an element with the `data-[name]` attribute for conditional rendering is given the `display: none` and `pointer-events: none` css properties when the tab is not active.
+By default, an element with the `data-[name]` attribute for conditional rendering is given the `display: none` and `pointer-events: none` css properties when the state is not active.
 
 You may replace that logic with your own by passing content to the `switch` mixin:
 
