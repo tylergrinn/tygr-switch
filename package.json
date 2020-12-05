@@ -1,13 +1,14 @@
 {
   "name": "@tygr/switch",
-  "version": "1.0.0",
+  "version": "1.1.0-beta",
   "description": "Tab hook and sass mixin",
   "main": "index.js",
   "types": "index.ts",
   "files": [
     "index.ts",
     "index.js",
-    "_index.scss"
+    "_index.scss",
+    "_util.scss"
   ],
   "browserslist": [
     "defaults"

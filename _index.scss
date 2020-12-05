@@ -1,13 +1,38 @@
 @use 'sass:meta';
 
+@import 'util';
+
 /**
  * @param {string} $name The name of the switch
  * @param {...string} $states A list of states the switch can be in
  */
 @mixin switch($name, $states...) {
   @each $state in $states {
-    &[data-#{$name}-#{$state}],
-    & [data-#{$name}-#{$state}] {
+    $stateEscaped: str-replace($state, '/', '__');
+
+    /*
+     * Generate partial paths from a '/' separated path
+     * IE: '/super/long/path' -> ['/', '/super', '/super/long', '/super/long/path']
+     */
+    $partials: [];
+    $appender: '';
+    @each $token in str-split($state, '/') {
+      @if $appender == '/' {
+        $appender: $appender + $token;
+      } @else {
+        $appender: $appender + '/' + $token;
+      }
+      $partials: append($partials, $appender);
+    }
+
+    $partialSelector: '';
+    @each $partial in $partials {
+      $partialSelector: $partialSelector +
+        ":not([data-#{$name}~='~#{$partial}'])";
+    }
+
+    &[data-#{$name}-#{$stateEscaped}],
+    & [data-#{$name}-#{$stateEscaped}] {
       // State named $state is currently active
 
       /**
@@ -20,7 +45,7 @@
        * If any elements with the data-$name attribute does not have $state in its value, nor is
        * the value using the exclusionary syntax, then hide it
        */
-      [data-#{$name}]:not([data-#{$name}~='#{$state}']):not([data-#{$name}*='!']) {
+      [data-#{$name}]:not([data-#{$name}~='#{$state}']):not([data-#{$name}*='!'])#{$partialSelector} {
         @if (content-exists()) {
           // Let mixin consumer override default inactive state styles
           @content;

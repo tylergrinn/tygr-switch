@@ -1,0 +1,28 @@
+@function str-replace($string, $search, $replace: '') {
+  $index: str-index($string, $search);
+
+  @if $index {
+    @return str-slice($string, 1, $index - 1) + $replace +
+      str-replace(
+        str-slice($string, $index + str-length($search)),
+        $search,
+        $replace
+      );
+  }
+
+  @return $string;
+}
+
+@function str-split($string, $sep) {
+  $result: [];
+
+  $i: str-index($string, $sep);
+  @while $i != null {
+    $item: str-slice($string, 1, $i - 1);
+    $result: append($result, $item);
+    $string: str-slice($string, $i + 1);
+    $i: str-index($string, $sep);
+  }
+
+  @return $result;
+}
