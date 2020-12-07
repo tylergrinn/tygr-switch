@@ -65,7 +65,7 @@ Spread the switch container object returned from the `useSwitch` hook over the p
 }
 ```
 
-The `switch` sass mixin takes in a name for the switch and a list of all the states it can be in. Both parameters should match the ones passed in to the `useSwitch` react hook. You should always enclose this mixin within a selector, just like above, because it makes use of the sass parent selector: `&`.
+The `switch` sass mixin takes in a name for the switch and a list of all the states it can be in. Both parameters should match the ones passed in to the `useSwitch` react hook. You should always enclose this mixin within a selector, just like above, because it makes use of the sass parent selector: `&`. The parent selector should target the same element that you spread the switch container object over.
 
 ## Step 3: hide and show elements conditionally using `data-[name]`
 

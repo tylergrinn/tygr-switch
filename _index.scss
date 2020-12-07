@@ -21,8 +21,7 @@
       }
     }
 
-    &[data-#{$name}-state='#{$state}'],
-    & [data-#{$name}-state='#{$state}'] {
+    &[data-#{$name}-state='#{$state}'] {
       /**
        * Hide any elements with the data-$name attribute that has the '!$state' exclusionary syntax
        * in its value
