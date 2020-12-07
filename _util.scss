@@ -1,3 +1,6 @@
+@use 'sass:string';
+@use 'sass:list';
+
 @function str-replace($string, $search, $replace: '') {
   $index: str-index($string, $search);
 
@@ -14,15 +17,46 @@
 }
 
 @function str-split($string, $sep) {
+  $i: str-index($string, $sep);
+
+  @if $i {
+    $head: str-slice($string, 1, $i - 1);
+    $tail: str-slice($string, $i + 1);
+
+    @return join($head, str-split($tail, $sep));
+  }
+
+  @return ($string);
+}
+
+@function list-slice($list, $start: 1, $end: length($list)) {
   $result: [];
 
-  $i: str-index($string, $sep);
-  @while $i != null {
-    $item: str-slice($string, 1, $i - 1);
-    $result: append($result, $item);
-    $string: str-slice($string, $i + 1);
-    $i: str-index($string, $sep);
+  @for $i from $start through $end {
+    $result: append($result, nth($list, $i));
   }
 
   @return $result;
+}
+
+/*
+ * Generate partial paths from a '/' separated path
+ * ie:
+ *   tokens = '/super/long/path'.split('/')
+ *   partials(tokens) -> ['/super', '/super/long', '/super/long/path']
+ */
+@function partials($tokens) {
+  @if length($tokens) < 1 {
+    @return [];
+  }
+
+  $partials: [];
+  $accumulator: '';
+
+  @each $token in $tokens {
+    $accumulator: '#{$accumulator}/#{$token}';
+    $partials: append($partials, $accumulator);
+  }
+
+  @return $partials;
 }

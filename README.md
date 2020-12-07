@@ -61,7 +61,7 @@ Spread the switch container object returned from the `useSwitch` hook over the p
 @use '@tygr/switch';
 
 .tygr-auth {
-  @include switch('auth', login, register, reset-password);
+  @include switch.switch('auth', login, register, reset-password);
 }
 ```
 
@@ -76,6 +76,8 @@ The `switch` sass mixin takes in a name for the switch and a list of all the sta
 ```
 
 For elements you want to conditionally show or hide, add the `data-[name]` attribute with a list of the state names you would like it to show up under. In this example, with the switch being named `'auth'`, the `password` input will be shown if the state is either `login` or `register`. Likewise, the `confirm-password` input will only be shown when the `register` state is active.
+
+These attributes can be used on any element that is a child of the switch container, regardless of which react component they are in.
 
 ## Step 4: Use the setState function to change switch states
 
@@ -127,14 +129,14 @@ You may replace that logic with your own by passing content to the `switch` mixi
 Ex 1: Using transitions
 
 ```scss
-@import '@tygr/switch';
+@use '@tygr/switch';
 
 .tygr-auth {
   [data-auth] {
     transition: opacity 1s;
   }
 
-  @include switch('auth', login, register, reset-password) {
+  @include switch.switch('auth', login, register, reset-password) {
     /**
     * These styles are applied when the data-auth
     * attribute *DOES NOT* match the current state
@@ -147,14 +149,14 @@ Ex 1: Using transitions
 Ex 2: Using animations
 
 ```scss
-@import '@tygr/switch';
+@use '@tygr/switch';
 
 .tygr-auth {
   [data-auth] {
     animation: _fade-in 1s;
   }
 
-  @include switch('auth', login, register, reset-password) {
+  @include switch.switch('auth', login, register, reset-password) {
     animation: _fade-out 1s forwards;
   }
 }
@@ -178,16 +180,16 @@ Ex 2: Using animations
 You can split the sass mixin into multiple calls to apply different transitions for different states becoming active:
 
 ```scss
-@import '@tygr/switch';
+@use '@tygr/switch';
 
 .tygr-auth {
   // Fade in and out when switching to and from the login and register states
-  @include switch('auth', login, register) {
+  @include switch.switch('auth', login, register) {
     opacity: 0;
   }
 
   // Shrink and expand when switching to and from the reset-password state
-  @include switch('auth', reset-password) {
+  @include switch.switch('auth', reset-password) {
     transform: scaleY(0);
   }
 
@@ -200,3 +202,96 @@ You can split the sass mixin into multiple calls to apply different transitions 
   }
 }
 ```
+
+The `switch` mixin only applies styles when a state is **not active**. In order to apply some styles to any element when specified states are **active**, use the `switchChild` mixin:
+
+```scss
+@use '@tygr/switch';
+
+.container {
+  @include switch.switch('switch', 'state-1', 'state-2', 'state-3');
+
+  .some-child {
+    @include switch.switchChild('switch', 'state-1', 'state-3') {
+      // Styles applied to `.some-child` when the `state-1` or `state-3` state is active
+      color: green;
+    }
+  }
+}
+```
+
+The mixin takes in the name of the parent switch and one or more states. When any of the specified states are active, the styles will be applied to the parent selector.
+
+# Composing multiple switches
+
+## Option 1: use the partial syntax for `data-[name]`
+
+```jsx
+[switchContainer, setState] = useSwitch(
+  { name: 'auth' },
+  'register',
+  'login/local',
+  'login/provider',
+);
+
+...
+
+return (
+  <div data-auth="^login">
+    <span>This div is shown for all states that begin with 'login/'</span>
+    <span data-auth="login/local">Local login</span>
+    <span data-auth="login/provider">Use a provider</span>
+  </div>
+);
+```
+
+If you want to have substates for a switch state, you can specify them as '/'-separated paths. No need to include the parent path but you can if you want the parent path to be considered a separate state.
+
+Use the `^` operator in the `data-[name]` attribute to include an element on all child paths, as shown above for the parent div. Other than the partial syntax, '/'-separated paths behave just like any other state.
+
+## Option 2: use a switchChild
+
+```jsx
+const [parent] = useSwitch(
+  { name: 'parent' },
+  'state-with-children',
+  'other-states'
+);
+const [child] = useSwitch({ name: 'child' }, 'child-1', 'child-2');
+
+...
+
+return (
+  <div {...parent} className="parent">
+    <div {...child} className="child">
+      <span data-child="child-1">
+        Only displays when the parent state is state-with-children
+      </span>
+    </div>
+  </div>
+)
+```
+
+```scss
+@use '@tygr/switch';
+
+.parent {
+  @include switch.switch('parent', state-with-children, other-states);
+}
+
+.child {
+  /*
+   * Wrap the child switch in the `switchChild` mixin.
+   * Call this mixin with name of the parent switch and the name of the state with children
+   */
+  @include switch.switchChild('parent', state-with-children) {
+    @include switch.switch('child', child-1, child-2);
+  }
+}
+```
+
+You can use the sass mixin `switchChild` to limit a child switch to only hide elements if the parent switch is in a specified state.
+
+The mixin takes in the name of the parent and any number of states for which you'd like the child to be active for.
+
+Functionally, the `switchChild` mixin applies styles (using the parent selector) only when the specified state is currently active.

@@ -7,8 +7,8 @@ interface SwitchOptions {
 
 /**
  *
- * @param {Object} options Optional options object
- * @param {string} options.name The base name of the switch. By default, this is just 'switch'.
+ * @param {Object} options Required options object
+ * @param {string} options.name Required. The base name of the switch.
  * Use the data-[name] attribute to conditionally show or hide content
  * @param {number} options.initialIndex index of the initial state
  * @param {...string} states Specify all the different states this switch can be in
@@ -23,7 +23,7 @@ export default function useSwitch<State extends string>(
 
   return [
     // Attributes object: spread over the rooat element of your switch container
-    { [`data-${name}-${currentState}`]: true },
+    { [`data-${name}-state`]: currentState },
     // Using a higher order function to clean up syntax in jsx
     (s) => () => setState(s),
     // Maps each tab name to a boolean value if it is the current tab

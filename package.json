@@ -1,6 +1,6 @@
 {
   "name": "@tygr/switch",
-  "version": "1.1.0-beta",
+  "version": "1.1.0",
   "description": "Tab hook and sass mixin",
   "main": "index.js",
   "types": "index.ts",
@@ -55,11 +55,12 @@
   "scripts": {
     "clean": "rimraf index.js dist",
     "ts": "tsc",
+    "ts:w": "npm run ts -- -w",
     "demo": "webpack --config demo/webpack.config",
     "demo:w": "webpack-dev-server --config demo/webpack.config",
     "build": "npm-run-all clean -p ts demo",
     "serve": "http-server",
-    "start": "npm run demo:w",
+    "start": "npm-run-all ts -p ts:w demo:w",
     "lint:check": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "lint": "npm run lint:fix",
