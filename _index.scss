@@ -18,6 +18,8 @@
   );
 
   @each $state in $states {
+    $exclusionSelectors: "[data-#{$name}~='!#{$state}'],";
+
     $finalSelector: selector-append(
       $baseFinalSelector,
       ":not([data-#{$name}~='#{$state}'])"
@@ -38,6 +40,9 @@
         $finalSelector,
         ":not([data-#{$name}~='^#{$partial}'])"
       );
+
+      $exclusionSelectors: $exclusionSelectors +
+        "[data-#{$name}~='!^#{$partial}'],";
     }
 
     &[data-#{$name}-state='#{$state}'] {
@@ -45,7 +50,7 @@
        * Hide any elements with the data-$name attribute that has the '!$state' exclusionary syntax
        * in its value
        */
-      [data-#{$name}~='!#{$state}'],
+      #{$exclusionSelectors}
 
       /**
        * If any elements with the data-$name attribute does not have $state in its value, nor is

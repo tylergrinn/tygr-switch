@@ -249,6 +249,14 @@ If you want to have substates for a switch state, you can specify them as '/'-se
 
 Use the `^` operator in the `data-[name]` attribute to include an element on all child paths, as shown above for the parent div. Other than the partial syntax, '/'-separated paths behave just like any other state.
 
+You can also combine the partial syntax `[^]` with the exclusion syntax `[!]`:
+
+```jsx
+<div data-auth="!^login">
+  <span>Only shown when state does not begin with 'login'</span>
+<div>
+```
+
 ## Option 2: use a switchChild
 
 ```jsx
