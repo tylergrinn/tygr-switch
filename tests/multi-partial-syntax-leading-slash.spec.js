@@ -1,6 +1,6 @@
 const { serve, assertHidden, assertVisible, writeTestCase } = require('./util');
 
-describe('Multi-partial syntax', () => {
+describe('Multi-partial syntax with leading forward slash', () => {
   const states = [
     '/a',
     '/a/b',
@@ -39,7 +39,7 @@ describe('Multi-partial syntax', () => {
   it(`Hides '^/a/b ^/x`, assertHidden('^/a/b ^/x'));
 });
 
-describe('Partial syntax with absolute syntax', () => {
+describe('Partial syntax with absolute syntax and leading forward slash', () => {
   const states = ['/a', '/a/b', '/a/b/c', '/x'];
   const tests = ['^/a/b /x', '/a ^/a/b/c'];
 
