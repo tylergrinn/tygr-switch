@@ -9,6 +9,7 @@ addons:
 
 script:
   - npm run quality:check
+  - npm run test
   - NODE_ENV=production npm run build
 
 deploy:

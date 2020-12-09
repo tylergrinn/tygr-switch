@@ -1,5 +1,6 @@
 @use 'sass:meta';
 @use 'sass:list';
+@use 'sass:selector';
 
 @use 'util' as *;
 
@@ -11,14 +12,32 @@
  * By default, this is `display: none; pointer-events: none;`
  */
 @mixin switch($name, $states...) {
+  $baseFinalSelector: selector-append(
+    '[data-#{$name}]',
+    ":not([data-#{$name}*='!'])"
+  );
+
   @each $state in $states {
-    $partialSelectors: '';
+    $finalSelector: selector-append(
+      $baseFinalSelector,
+      ":not([data-#{$name}~='#{$state}'])"
+    );
+
     $tokens: str-split($state, '/');
-    @if length($tokens) > 2 {
-      $partials: partials(list-slice($tokens, 2));
-      @each $partial in $partials {
-        $partialSelectors: "#{$partialSelectors}:not([data-#{$name}~='^#{$partial}'])";
-      }
+
+    @if length($tokens) > 1 and nth($tokens, 1) == '' {
+      // State has a leading forward slash that was split to the first token
+      // Remove the first tokena and add the forward slash to the new first token
+      $tokens: list-slice($tokens, 2);
+      $tokens: set-nth($tokens, 1, '/#{nth($tokens, 1)}');
+    }
+
+    $partials: partials($tokens);
+    @each $partial in $partials {
+      $finalSelector: selector.append(
+        $finalSelector,
+        ":not([data-#{$name}~='^#{$partial}'])"
+      );
     }
 
     &[data-#{$name}-state='#{$state}'] {
@@ -32,7 +51,7 @@
        * If any elements with the data-$name attribute does not have $state in its value, nor is
        * the value using the exclusionary syntax, then hide it
        */
-      [data-#{$name}]:not([data-#{$name}~='#{$state}']):not([data-#{$name}*='!']):not([data-#{$name}*='~'])#{$partialSelectors} {
+      #{$finalSelector} {
         @if (content-exists()) {
           // Let mixin consumer override default inactive state styles
           @content;

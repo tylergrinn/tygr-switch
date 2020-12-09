@@ -45,18 +45,24 @@
  *   tokens = '/super/long/path'.split('/')
  *   partials(tokens) -> ['/super', '/super/long', '/super/long/path']
  */
-@function partials($tokens) {
+@function partials($tokens, $acc: []) {
   @if length($tokens) < 1 {
-    @return [];
+    @return $acc;
   }
 
-  $partials: [];
-  $accumulator: '';
+  $firstToken: nth($tokens, 1);
+  $tailTokens: [];
 
-  @each $token in $tokens {
-    $accumulator: '#{$accumulator}/#{$token}';
-    $partials: append($partials, $accumulator);
+  @if length($tokens) > 1 {
+    $tailTokens: list-slice($tokens, 2);
   }
 
-  @return $partials;
+  @if length($acc) < 1 {
+    @return partials($tailTokens, ($firstToken));
+  }
+
+  $lastPartial: nth($acc, length($acc));
+  $acc: append($acc, '#{$lastPartial}/#{$firstToken}');
+
+  @return partials($tailTokens, $acc);
 }
